@@ -58,14 +58,14 @@ and connect through that:
 > NOTE: Find and kill the port-forward process afterwards using `ps` and `kill`.
 
 ```
-# Choose below the IP address of your machine you want to use to access application 
+# Choose below the IP address of your machine you want to use to access application
 ADDR=0.0.0.0
-# Choose below the port of your machine you want to use to access application 
+# Choose below the port of your machine you want to use to access application
 PORT=9000
 kubectl port-forward --address ${ADDR} svc/podtato-main ${PORT}:9000 &
 ```
 
-Now test the API itself with a browser at `http://<uid>.int.be.continental.cloud:9000/`
+Now test the API itself with a browser at `http://<uid>.internal.cdsf.io:9000/`
 
 ## Purge
 

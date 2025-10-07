@@ -60,4 +60,4 @@ kapp deploy -a istio -f <(istioctl manifest generate --set profile=default)
 
 ## TODO
 
-- [ ] Add kapp controller : https://github.com/vmware-tanzu/carvel-kapp-controller/blob/develop/docs/README.md
+- [ ] Evaluate kapp controller : https://github.com/vmware-tanzu/carvel-kapp-controller/blob/develop/docs/README.md

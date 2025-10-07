@@ -10,15 +10,27 @@ For your convenience, you can find commmands to install Argo below :
 
 - [Install ArgoCD CLI](https://argoproj.github.io/argo-cd/cli_installation/) :
 
-```
-VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
-sudo chmod +x /usr/local/bin/argocd
-```
+  - without devbox :
+
+    ```bash
+    VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+    [[ -z "$VERSION" ]] && VERSION="v3.1.8" # fallback version in case the github API is not reachable (rate limit exceeded for example)
+    echo "ArgoCD version: $VERSION"
+
+    sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
+    sudo chmod +x /usr/local/bin/argocd
+    ```
+
+  - with devbox :
+
+    ```bash
+    devbox search argocd
+    devbox global add argocd # or "devbox global add argocd@<VERSION>" if you want a specific version (where <VERSION>=3.1.8 for example)
+    ```
 
 - [Install ArgoCD on your cluster](https://argoproj.github.io/argo-cd/getting_started/#1-install-argo-cd) :
 
-```
+```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
@@ -33,20 +45,20 @@ TL;DR
 ```bash
 # Get initial admin password
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
- 
+
 # Login with the CLI
 argocd login --insecure --grpc-web --port-forward --port-forward-namespace argocd
- 
+
 # Username: admin
 # Password: <the one you just retrieved>
- 
+
 # Update password
 argocd account update-password --insecure --grpc-web --port-forward --port-forward-namespace argocd
- 
+
 # Access to the UI (open a new terminal to enter this command to avoid being distrubed by outputs)
 kubectl -n argocd port-forward --address 0.0.0.0 svc/argocd-server 8082:80
- 
-# Open UI at http://<uid>.int.be.continental.cloud:8082
+
+# Open UI at http://<uid>.internal.cdsf.io:8082
 # Login with the new credentials
 ```
 
@@ -123,9 +135,8 @@ A new panel appears to show every resource that will be synchronized : click ```
 
 ![syncing the application](images/argoSynchronize.png)
 
-This will now
-create all application ressources in the cluster. Once syncing is finished you
-will see all application components as healthy.
+This will now create all application ressources in the cluster.
+Once syncing is finished you will see all application components as healthy.
 
 ![Show deployed application in ArgoCD](images/argoDeployment.png)
 
